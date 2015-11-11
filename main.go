@@ -20,4 +20,7 @@ func main() {
       ioutil.WriteFile("trace.txt", []byte(trace), 0644);
     }
   }()
+
+  out := make(chan string)
+  startWatch(*logFile, out)
 }
