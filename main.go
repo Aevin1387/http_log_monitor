@@ -9,6 +9,7 @@ import (
 
 var (
   logFile = flag.String("log", "/tmp/log", "Log File to watch")
+  format = flag.String("format", "%h %l %u %t \"%r\" %>s %b", "Log Format")
 )
 
 func main() {
@@ -22,5 +23,7 @@ func main() {
   }()
 
   out := make(chan string)
-  startWatch(*logFile, out)
+
+  go startWatch(*logFile, out)
+  startParser(out, *format)
 }

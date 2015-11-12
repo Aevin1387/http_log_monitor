@@ -38,7 +38,7 @@ func startWatch(filename string, out chan string) {
 
   // Watch file for writes
   done := make(chan bool)
-  go func() {
+  func() {
     for {
       select {
       case event := <-watcher.Events:
