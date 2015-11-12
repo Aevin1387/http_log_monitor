@@ -33,14 +33,14 @@ const (
   W3CDate = "02/Jan/2006:15:04:05 -0700"
 )
 
-func startParser(input chan string, logFormat string) {
+func startParser(inputChan chan string, outputChan chan LineData, logFormat string) {
   formatsMaps := parseFormatToRegexMaps(logFormat)
   formatsRegex := parseRegexMapsToRegex(formatsMaps)
 
   for {
     select {
-      case line := <- input:
-        parseLine(line, formatsMaps, formatsRegex)
+      case line := <- inputChan:
+        outputChan <- parseLine(line, formatsMaps, formatsRegex)
     }
   }
 }
@@ -90,8 +90,6 @@ func parseLine(line string, formatsMaps []RegexMap, formatsRegex *regexp.Regexp)
     }
   }
 
-  fmt.Println(data)
-
   return data
 }
 
@@ -134,7 +132,6 @@ func parseRegexMapsToRegex(formatsMaps []RegexMap) *regexp.Regexp {
   regexStr := strings.Join(regexs, " ")
 
   regexStr = "^" + regexStr
-  fmt.Println(regexStr)
   r := regexp.MustCompile(regexStr)
 
   return r

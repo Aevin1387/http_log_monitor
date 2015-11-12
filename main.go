@@ -22,8 +22,10 @@ func main() {
     }
   }()
 
-  out := make(chan string)
+  rawLineChan := make(chan string)
+  parsedLineChan := make(chan LineData)
 
-  go startWatch(*logFile, out)
-  startParser(out, *format)
+  go startWatch(*logFile, rawLineChan)
+  go startStats(parsedLineChan)
+  startParser(rawLineChan, parsedLineChan, *format)
 }
