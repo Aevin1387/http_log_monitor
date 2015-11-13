@@ -38,6 +38,7 @@ func startDisplay() {
   termbox.SetInputMode(termbox.InputEsc)
 
   setupEvents()
+  setupAlerts()
   printLineTo(0, 0, termbox.ColorWhite, backgroundDefault, "Waiting for hits")
 
   timer := time.Tick(time.Millisecond * 100)
@@ -86,6 +87,7 @@ func redrawScreen() {
   if(time.Now().Sub(statStart) > statDisplayTime) {
     termbox.Clear(backgroundDefault, backgroundDefault)
     displayStatistics()
+    displayAlerts()
     statStart = time.Now()
     archiveStatData()
   }
