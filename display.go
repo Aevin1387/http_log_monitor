@@ -87,7 +87,7 @@ func redrawScreen() {
   if(time.Now().Sub(statStart) > statDisplayTime) {
     termbox.Clear(backgroundDefault, backgroundDefault)
     displayStatistics()
-    displayAlerts()
+    displayAlerts(printAlert, printResolved)
     statStart = time.Now()
     archiveStatData()
   }

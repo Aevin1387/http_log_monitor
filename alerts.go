@@ -25,12 +25,30 @@ type Alert struct {
 }
 
 func setupAlerts() {
-  alerts = make([]*Alert, 0)
   startTime = time.Now()
 }
 
-func displayAlerts() {
+// AlertPrinter is an interface type for printing alerts
+type AlertPrinter func(x, y int, msg string)
+
+func displayAlerts(pAlert, pResolved AlertPrinter) {
   checkForAlerts()
+
+  lineNum := alertLine
+  for _, alert := range alertsToDisplay() {
+    line := fmt.Sprintf("Alert: %v hits on average at %v", alert.hits, alert.alertedAt)
+    pAlert(0, lineNum, line)
+    lineNum++
+    if(alert.resolved) {
+      fmt.Println("Printing resolved")
+      line := fmt.Sprintf("Alert resolved at %v", alert.resolvedAt)
+      pResolved(0, lineNum, line)
+      lineNum++
+    }
+  }
+}
+
+func alertsToDisplay() []*Alert  {
   alertsToDisplay := alerts
   maxHeight := screenHeight - alertLine - 1
   totalAlerts := len(alertsToDisplay)
@@ -38,18 +56,7 @@ func displayAlerts() {
   if(totalAlerts > maxHeight) {
     alertsToDisplay = alertsToDisplay[totalAlerts - maxHeight:]
   }
-
-  lineNum := alertLine
-  for _, alert := range alertsToDisplay {
-    line := fmt.Sprintf("Alert: %v hits on average at %v", alert.hits, alert.alertedAt)
-    printAlert(0, lineNum, line)
-    lineNum++
-    if(alert.resolved) {
-      line := fmt.Sprintf("Alert resolved at %v", alert.resolvedAt)
-      printResolved(0, lineNum, line)
-      lineNum++
-    }
-  }
+  return alertsToDisplay
 }
 
 func checkForAlerts() {
@@ -89,8 +96,7 @@ func averageHitCount() int {
 }
 
 func canResolve() bool {
-  // return openAlert != nil && time.Now().Sub(startTime) >= (time.Minute * 2)
-  return openAlert != nil && time.Now().Sub(startTime) >= (time.Second * 30)
+  return openAlert != nil && time.Now().Sub(startTime) >= (time.Minute * 2)
 }
 
 func printAlert(x, y int, msg string) {
