@@ -8,6 +8,8 @@ import (
   "time"
 )
 
+// LineData is a struct to contain the various
+// pieces of data in a line from a HTTPd log file
 type LineData struct {
   Date    time.Time
 
@@ -24,12 +26,15 @@ type LineData struct {
   AuthUser   string
 }
 
+// RegexMap is a struct to contain a mapping of a
+// regex string to it's field
 type RegexMap struct {
   regex string
   field string
 }
 
 const (
+  // W3CDate is the date format in the W3C format
   W3CDate = "02/Jan/2006:15:04:05 -0700"
 )
 
@@ -96,7 +101,7 @@ func parseLine(line string, formatsMaps []RegexMap, formatsRegex *regexp.Regexp)
 
 func parseFormatToRegexMaps(logFormat string) []RegexMap {
   formats := strings.Split(logFormat, " ")
-  formatRegexes := make([]RegexMap, 0)
+  var formatRegexes []RegexMap
 
   // "%h %l %u %t \"%r\" %>s %b"
   for _, format := range formats {
@@ -124,7 +129,7 @@ func parseFormatToRegexMaps(logFormat string) []RegexMap {
 }
 
 func parseRegexMapsToRegex(formatsMaps []RegexMap) *regexp.Regexp {
-  regexs := make([]string, 0)
+  var regexs []string
 
   for _, regexMap := range formatsMaps {
     regexs = append(regexs, regexMap.regex)

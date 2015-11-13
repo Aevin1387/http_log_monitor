@@ -156,7 +156,7 @@ func topThreeHits(mapping map[string]int) string {
     arr = stringCounts[:3]
   }
 
-  countStrings := make([]string, 0)
+  var countStrings []string
   for _, stringCount := range arr {
     countStrings = append(countStrings, stringCount.ToPrintString())
   }

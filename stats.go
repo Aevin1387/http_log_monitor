@@ -4,6 +4,8 @@ import (
   "time"
 )
 
+// SectionStat is a struct containing the
+// statistics for a section starting at a period of time
 type SectionStat struct {
   hitCount       int              // number of hits
   methodsCounts  map[string] int  // number of hits per method
@@ -13,12 +15,18 @@ type SectionStat struct {
   startTime      time.Time        // time when statistics started
 }
 
+// SectionData is a struct containing
+// the current and history of statistics for a
+// section
 type SectionData struct {
   name           string           // section name, ex /home
   currentStat    *SectionStat     // current set of statistics
   statHistory    []*SectionStat
 }
 
+// StartNewStats will create a new set of statistics
+// for a section, and include it in that section's
+// history
 func (sectionData *SectionData) StartNewStats() {
   newStat := new(SectionStat)
   newStat.startTime =  time.Now()
@@ -34,12 +42,12 @@ func (sectionData *SectionData) StartNewStats() {
 
 var allSectionData map[string]*SectionData // all section data, by section name
 
-func startStats(data_chan chan LineData) {
+func startStats(dataChan chan LineData) {
   allSectionData = make(map[string]*SectionData)
 
   for {
     select {
-    case lineData := <-data_chan:
+    case lineData := <-dataChan:
       updateStats(lineData)
     }
   }
@@ -70,7 +78,7 @@ func dataForSection(sectionName string) *SectionData {
 }
 
 func archiveStatData() {
-  for index, _ := range allSectionData {
+  for index := range allSectionData {
     sectionData := allSectionData[index]
     sectionData.StartNewStats()
   }

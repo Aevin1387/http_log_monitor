@@ -16,6 +16,7 @@ var openAlert      *Alert           // an open alert, if any
 var alerts         []*Alert         // all alerts
 var startTime      time.Time
 
+// Alert is an exported type that contains alert data
 type Alert struct {
   hits          int               // number of hits causing alert
   alertedAt     time.Time         // time alert started
