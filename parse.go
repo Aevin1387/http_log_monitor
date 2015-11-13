@@ -75,9 +75,9 @@ func parseLine(line string, formatsMaps []RegexMap, formatsRegex *regexp.Regexp)
       location := requests[1]
       locations := strings.Split(location, "/")
       if(len(locations) > 1) { // First / considered blank
-        data.SectionStr = locations[1]
+        data.SectionStr = "/" + locations[1]
       } else {
-        data.SectionStr = ""
+        data.SectionStr = "/"
       }
 
       data.RequestProtocol = requests[2]

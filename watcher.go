@@ -1,11 +1,11 @@
 package main
 
 import (
-"bufio"
-"log"
-"os"
+  "bufio"
+  "log"
+  "os"
 
-"gopkg.in/fsnotify.v1"
+  "gopkg.in/fsnotify.v1"
 )
 
 func startWatch(filename string, out chan string) {
