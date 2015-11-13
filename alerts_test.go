@@ -9,17 +9,16 @@ import (
 
 func TestCanResolve(t *testing.T) {
   startTime = time.Now().Add(-time.Minute * 2)
-  if canResolve() {
+  if canResolve(1) {
     t.Error("canResolve alerted that it can resolve when there is nothing to resolve")
   }
 
   openAlert = new(Alert)
-  if !canResolve() {
+  if !canResolve(1) {
     t.Error("canResolve alerted that it can resolve when it couldn't")
   }
 
-  startTime = time.Now().Add(-time.Second)
-  if canResolve() {
+  if canResolve(30) {
     t.Error("canResolve alerted that it can't resolve when it should")
   }
 }
@@ -80,7 +79,7 @@ func TestCheckForAlerts(t *testing.T) {
     t.Error("checkForAlerts opened an alert when there was one")
   }
 
-  startTime = time.Now().Add(-time.Minute * 2)
+  sectionData.currentStat.hitCount = 1
   alerts = append(alerts, openAlert)
   checkForAlerts()
   if(openAlert != nil) {

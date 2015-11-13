@@ -40,7 +40,6 @@ func displayAlerts(pAlert, pResolved AlertPrinter) {
     pAlert(0, lineNum, line)
     lineNum++
     if(alert.resolved) {
-      fmt.Println("Printing resolved")
       line := fmt.Sprintf("Alert resolved at %v", alert.resolvedAt)
       pResolved(0, lineNum, line)
       lineNum++
@@ -66,7 +65,7 @@ func checkForAlerts() {
     openAlert.hits = hits
     openAlert.alertedAt = time.Now()
     alerts = append(alerts, openAlert)
-  } else if (canResolve()) {
+  } else if (canResolve(hits)) {
     openAlert.resolvedAt = time.Now()
     openAlert.resolved = true
     openAlert = nil
@@ -95,8 +94,8 @@ func averageHitCount() int {
   return (hits / historyAmount)
 }
 
-func canResolve() bool {
-  return openAlert != nil && time.Now().Sub(startTime) >= (time.Minute * 2)
+func canResolve(averageHits int) bool {
+  return openAlert != nil && (averageHits < *alertAmount)
 }
 
 func printAlert(x, y int, msg string) {
